@@ -94,34 +94,39 @@ void setup() {
 }
 
 void loop() {
-    // Obrada prekida prema prioritetima
-
     // Obrada tipki
     if (btn1_pressed) {
         btn1_pressed = false;
-        Serial.println("Button 1 Pressed");
+        // Tipka 1: togglaj LED
+        digitalWrite(LED_PIN, !digitalRead(LED_PIN));  // Toglaj LED
+        Serial.println("Button 1 Pressed: LED toggled");
     }
 
     if (btn2_pressed) {
         btn2_pressed = false;
-        Serial.println("Button 2 Pressed");
+        // Tipka 2: uključi LED
+        digitalWrite(LED_PIN, HIGH);  // LED on
+        Serial.println("Button 2 Pressed: LED ON");
     }
 
     // Obrada PIR senzora
     if (sensor_triggered) {
         sensor_triggered = false;
+        // Detekcija pokreta
         Serial.println("Motion Detected by PIR Sensor");
     }
 
     // Obrada timera
     if (timer_triggered) {
         timer_triggered = false;
+        // Timer: svaki put kad timer istekne
         Serial.println("Timer Interrupt Triggered");
     }
 
     // Obrada serijskog porta
     if (serial_received) {
         serial_received = false;
+        // Primi podatke sa serijskog porta
         Serial.print("Received from Serial: ");
         Serial.println(received_char);
     }
