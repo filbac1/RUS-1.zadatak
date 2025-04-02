@@ -62,4 +62,4 @@ Preporučuje se testirati sustav u sljedećim uvjetima:
 - Serijski port treba ispravno primati podatke i ispisivati primljene znakove.
 
 ## Zaključak:
-Ovaj projekt učinkovito upravlja različitim događajima putem prekida, omogućujući brzu i efikasnu obradu podataka u stvarnom vremenu. Program koristi prioritete za osiguranje ispravnog redoslijeda obrade prekida i sprječava sukobe između njih.
+Projekt prolazi po točkama zadatka i efikasno radi s prekidima.
