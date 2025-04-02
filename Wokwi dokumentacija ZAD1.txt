@@ -1,0 +1,65 @@
+# Dokumentacija za Zadatak 1 za kolegij Razboj Ugradbenih Sustava (2024/2025)
+
+## Pregled projekta
+Ovaj projekt koristi ESP32 mikrokontroler za upravljanje ulazima i izlazima na temelju različitih prekida. Projekt uključuje dva gumba, PIR senzor, LED indikator i serijsku komunikaciju. Program obrađuje nekoliko prekida u različitim prioritetima kako bi reagirao na različite događaje u stvarnom vremenu.
+
+## Komponente:
+- BTN1_PIN (12) - Pin za prvi gumb
+- BTN2_PIN (14) - Pin za drugi gumb
+- LED_PIN (2) - Pin za LED indikator
+- SENSOR_PIN (33) - Pin za PIR senzor
+- SERIAL_RX_PIN (16) - Pin za serijski prijemnik
+
+## Funkcionalnosti:
+- Prekidi (Interrupts): Projekt koristi nekoliko prekida za različite ulaze i događaje:
+  - Button 1: Detektira pritisak na prvi gumb.
+  - Button 2: Detektira pritisak na drugi gumb.
+  - PIR Sensor: Detektira pokret preko PIR senzora.
+  - Timer: Pokreće događaj svake sekunde za promjenu stanja LED-a.
+  - Serial: Detektira primanje podataka preko serijskog porta.
+
+## Prioriteti prekida:
+- BTN1_INTR_PRIORITY (10): Najveći prioritet, koristi se za tipku 1.
+- BTN2_INTR_PRIORITY (20): Srednji prioritet, koristi se za tipku 2.
+- SENSOR_INTR_PRIORITY (30): Viši prioritet, koristi se za PIR senzor.
+- TIMER_INTR_PRIORITY (40): Najniži prioritet, koristi se za timer interrupt.
+
+## Opis funkcija:
+
+### `btn1ISR()`
+ISR funkcija koja se poziva kada je pritisnuta tipka 1. Obavlja debouncing kako bi spriječila višestruka aktiviranja u kratkom vremenskom razdoblju.
+
+### `btn2ISR()`
+ISR funkcija koja se poziva kada je pritisnuta tipka 2. Također obavlja debouncing za sprječavanje višestrukih aktiviranja.
+
+### `sensorISR()`
+ISR funkcija koja se poziva kada PIR senzor detektira pokret (promjena stanja signala sa LOW na HIGH ili obratno).
+
+### `onTimer()`
+ISR funkcija koja se poziva svakih 1 sekundu, temeljen na timeru. Uključuje/isključuje LED indikator i postavlja flag za daljnju obradu u `loop()` funkciji.
+
+### `serialISR()`
+ISR funkcija koja se poziva kada podaci stignu na serijski prijemnik. Pročitati će primljeni znak i postaviti flag za daljnju obradu.
+
+### `setup()`
+Inicijalizira serijsku komunikaciju, postavlja pinove za gumbe, LED i PIR senzor. Također povezuje prekide s odgovarajućim funkcijama i postavlja timer.
+
+### `loop()`
+Kontinuirano provodi obradu podataka iz različitih prekida. Provjerava flagove za svaki događaj i izvršava odgovarajući kod za obradu tih događaja.
+
+## Veze među komponentama:
+1. BTN1_PIN povezan s prvim gumbom.
+2. BTN2_PIN povezan s drugim gumbom.
+3. SENSOR_PIN povezan s PIR senzorom.
+4. LED_PIN povezan s LED indikatorom.
+5. SERIAL_RX_PIN povezan s serijskim prijemnikom.
+
+## Testiranje:
+Preporučuje se testirati sustav u sljedećim uvjetima:
+- Pritisak tipki 1 i 2 treba biti prepoznat i ispisivati odgovarajuće poruke.
+- PIR senzor treba ispravno detektirati pokret i ispisivati poruku u serijskom monitoru.
+- LED treba svijetliti svaki put kad timer interrupt dođe.
+- Serijski port treba ispravno primati podatke i ispisivati primljene znakove.
+
+## Zaključak:
+Ovaj projekt učinkovito upravlja različitim događajima putem prekida, omogućujući brzu i efikasnu obradu podataka u stvarnom vremenu. Program koristi prioritete za osiguranje ispravnog redoslijeda obrade prekida i sprječava sukobe između njih.
